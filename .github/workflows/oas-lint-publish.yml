@@ -23,7 +23,7 @@ jobs:
       run: npm install -g @redocly/openapi-cli
 
     - name: Lint OpenAPI Spec
-      run: openapi lint tps-reports-api.yml
+      run: openapi lint openapi.yaml
 
   publish:
     name: Publish OpenAPI Specification
@@ -43,11 +43,12 @@ jobs:
       run: npm install -g redoc-cli
 
     - name: Generate HTML Documentation
-      run: redoc-cli bundle tps-reports-api.yml -o public/index.html
+      run: redoc-cli bundle openapi.yaml -o public/index.html
 
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
+        name: github-pages
         path: ./public
 
   deploy:
@@ -59,5 +60,11 @@ jobs:
       id-token: write
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        artifact_name: github-pages
