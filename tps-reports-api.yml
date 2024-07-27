@@ -1,0 +1,124 @@
+openapi: 3.0.0
+info:
+  title: Initech TPS Reports API
+  description: API for managing TPS reports at Initech.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: Local server
+paths:
+  /tps-reports:
+    get:
+      summary: Get all TPS reports
+      responses:
+        '200':
+          description: A list of TPS reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TPSReport'
+    post:
+      summary: Create a new TPS report
+      requestBody:
+        description: TPS report object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TPSReport'
+      responses:
+        '201':
+          description: TPS report created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TPSReport'
+  /tps-reports/{id}:
+    get:
+      summary: Get a TPS report by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the TPS report to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: TPS report retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TPSReport'
+        '404':
+          description: TPS report not found
+    put:
+      summary: Update a TPS report by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the TPS report to update
+          schema:
+            type: integer
+      requestBody:
+        description: Updated TPS report object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TPSReport'
+      responses:
+        '200':
+          description: TPS report updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TPSReport'
+        '404':
+          description: TPS report not found
+    delete:
+      summary: Delete a TPS report by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the TPS report to delete
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: TPS report deleted successfully
+        '404':
+          description: TPS report not found
+components:
+  schemas:
+    TPSReport:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Monthly TPS Report"
+        author:
+          type: string
+          example: "Peter Gibbons"
+        status:
+          type: string
+          enum: [DRAFT, REVIEW, APPROVED, REJECTED]
+          example: "DRAFT"
+        createdDate:
+          type: string
+          format: date-time
+          example: "2024-07-26T15:35:00Z"
+        lastModifiedDate:
+          type: string
+          format: date-time
+          example: "2024-07-26T15:35:00Z"
+        comments:
+          type: string
+          example: "Needs more cover sheets"
